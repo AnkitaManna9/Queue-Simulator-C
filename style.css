@@ -1,0 +1,864 @@
+/* =====================================
+   QUEUELAB - FIFO QUEUE SIMULATOR
+   MAIN WEBSITE STYLING
+===================================== */
+
+/* RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 25px;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6fb;
+    color: #263247;
+}
+
+
+/* MAIN LAYOUT */
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.sidebar {
+    width: 250px;
+    background: #17243b;
+    color: white;
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 45px;
+    padding-left: 8px;
+}
+
+.logo span {
+    background: #4b83f5;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.logo h2 {
+    font-size: 21px;
+    letter-spacing: 0.5px;
+}
+
+.logo small {
+    color: #9daec8;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.nav-heading {
+    color: #8798b3;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    margin: 25px 10px 12px;
+}
+
+.nav-link {
+    display: block;
+    text-decoration: none;
+    color: #b8c5d9;
+    padding: 13px 12px;
+    border-radius: 9px;
+    margin: 5px 0;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: #2d4162;
+    color: white;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    border-top: 1px solid #35445e;
+    padding: 20px 8px 0;
+    font-size: 13px;
+    color: #c2cce0;
+}
+
+.sidebar-footer small {
+    display: block;
+    color: #8798b3;
+    margin-top: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #34cf8b;
+    margin-right: 6px;
+}
+
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.main-content {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 30px 38px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 38px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #e3e7ef;
+}
+
+.welcome-text {
+    color: #71809a;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 7px;
+}
+
+.topbar h1 {
+    font-size: 30px;
+    color: #1d2b43;
+}
+
+.live-indicator {
+    color: #178e64;
+    background: #e0f7ed;
+    padding: 10px 15px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+
+/* =====================================
+   SECTION HEADINGS
+===================================== */
+
+section {
+    margin-bottom: 45px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    gap: 15px;
+}
+
+.section-heading h2 {
+    color: #202e45;
+    font-size: 23px;
+    margin-bottom: 6px;
+}
+
+.section-heading p {
+    color: #8290a5;
+    font-size: 13px;
+}
+
+
+/* =====================================
+   STATISTICS CARDS
+===================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    background: white;
+    padding: 23px 20px;
+    border-radius: 13px;
+    box-shadow: 0 3px 15px rgba(32, 48, 75, 0.04);
+    border: 1px solid #edf0f5;
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(32, 48, 75, 0.09);
+}
+
+.stat-card span {
+    color: #7d8ba0;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.stat-card h2 {
+    color: #326de0;
+    font-size: 29px;
+    margin: 12px 0 5px;
+}
+
+.stat-card small {
+    color: #a1aabb;
+    font-size: 11px;
+}
+
+
+/* =====================================
+   SERVER STATUS
+===================================== */
+
+.server-card {
+    background: linear-gradient(110deg, #315fd4, #7457d8);
+    color: white;
+    border-radius: 14px;
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 7px 20px rgba(70, 91, 200, 0.15);
+}
+
+.card-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+.server-card h2 {
+    font-size: 25px;
+    margin: 7px 0;
+}
+
+.server-card p {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.server-right {
+    text-align: right;
+}
+
+.server-right span {
+    font-size: 11px;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.server-right h2 {
+    font-size: 30px;
+}
+
+
+/* =====================================
+   MODE SELECTOR
+===================================== */
+
+.mode-selector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.mode-btn {
+    background: white;
+    color: #52627a;
+    border: 1px solid #dce2ec;
+    padding: 13px 22px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.mode-btn:hover,
+.mode-btn.active {
+    background: #326de0;
+    color: white;
+    border-color: #326de0;
+}
+
+
+/* =====================================
+   SETTINGS CARD
+===================================== */
+
+.settings-card,
+.queue-card,
+.manual-controls,
+.chart-card,
+.table-container,
+.about-card {
+    background: white;
+    padding: 25px;
+    border-radius: 13px;
+    border: 1px solid #edf0f5;
+    box-shadow: 0 3px 15px rgba(32, 48, 75, 0.04);
+    margin-bottom: 22px;
+}
+
+.settings-card h3,
+.manual-controls h3,
+.queue-card h3 {
+    font-size: 17px;
+    margin-bottom: 20px;
+    color: #263750;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #65738a;
+}
+
+.form-group input,
+.manual-input input {
+    padding: 12px;
+    border: 1px solid #dce2ec;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+    background: #fafbfe;
+    color: #29364c;
+}
+
+.form-group input:focus,
+.manual-input input:focus {
+    border-color: #326de0;
+    box-shadow: 0 0 0 3px rgba(50, 109, 224, 0.1);
+}
+
+.printer-settings {
+    margin-top: 20px;
+    max-width: 300px;
+}
+
+.printer-settings p {
+    color: #8793a7;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+.simulation-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+button {
+    font-family: inherit;
+}
+
+.primary-btn,
+.secondary-btn,
+.reset-btn {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.primary-btn {
+    background: #326de0;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #2458bd;
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background: #eaf0fc;
+    color: #326de0;
+}
+
+.secondary-btn:hover {
+    background: #dce7fc;
+}
+
+.reset-btn {
+    background: #fff0ef;
+    color: #dc625a;
+}
+
+.reset-btn:hover {
+    background: #ffe1df;
+}
+
+.clock {
+    margin-top: 23px;
+    color: #7b889c;
+    font-size: 13px;
+}
+
+.clock strong {
+    color: #326de0;
+    font-size: 16px;
+}
+
+
+/* =====================================
+   QUEUE VISUALIZATION
+===================================== */
+
+.queue-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.queue-heading h3 {
+    margin-bottom: 5px;
+}
+
+.queue-heading p {
+    font-size: 12px;
+    color: #8c98aa;
+}
+
+.queue-count {
+    font-size: 12px;
+    background: #eaf0fc;
+    color: #326de0;
+    padding: 10px 14px;
+    border-radius: 20px;
+}
+
+.server-visual {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    background: #f0f4ff;
+    border: 1px solid #e1e9fc;
+    padding: 18px;
+    border-radius: 11px;
+    margin-bottom: 28px;
+}
+
+.server-icon {
+    background: white;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 26px;
+}
+
+.server-visual strong {
+    font-size: 14px;
+}
+
+.server-visual p {
+    color: #8290a5;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.queue-labels {
+    display: flex;
+    justify-content: space-between;
+    color: #98a3b5;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.queue-container {
+    min-height: 130px;
+    border: 2px dashed #dbe2ee;
+    background: #fafbfe;
+    border-radius: 11px;
+    padding: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    overflow-x: auto;
+}
+
+.empty-message {
+    width: 100%;
+    text-align: center;
+    color: #9aa6b7;
+    font-size: 13px;
+}
+
+.queue-item {
+    min-width: 105px;
+    background: white;
+    border: 1px solid #dce5f5;
+    border-radius: 10px;
+    padding: 13px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(32, 48, 75, 0.04);
+}
+
+.queue-item.front {
+    border: 2px solid #326de0;
+    background: #edf3ff;
+}
+
+.queue-item strong {
+    display: block;
+    color: #326de0;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.queue-item small {
+    color: #8491a5;
+    font-size: 10px;
+}
+
+
+/* =====================================
+   MANUAL CONTROLS
+===================================== */
+
+.manual-controls > p {
+    font-size: 12px;
+    color: #8793a7;
+    margin-bottom: 18px;
+}
+
+.manual-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.manual-input input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.operation-message {
+    background: #f1f5fc;
+    color: #50617b;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 17px;
+    font-size: 12px;
+}
+
+
+/* =====================================
+   ANALYTICS AND CHARTS
+===================================== */
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.chart-card h3 {
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.chart-card canvas {
+    max-height: 280px;
+}
+
+
+/* =====================================
+   ACTIVITY TABLE
+===================================== */
+
+.table-container {
+    overflow-x: auto;
+    padding: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th {
+    background: #f0f4fc;
+    color: #63728b;
+    font-size: 11px;
+    text-align: left;
+    padding: 16px 14px;
+}
+
+td {
+    padding: 15px 14px;
+    border-bottom: 1px solid #edf0f5;
+    color: #5c6b82;
+    font-size: 12px;
+}
+
+tr:hover td {
+    background: #fafbfe;
+}
+
+.empty-table {
+    text-align: center;
+    color: #9aa6b7;
+    padding: 25px;
+}
+
+
+/* =====================================
+   ABOUT FIFO
+===================================== */
+
+.about-card h3 {
+    color: #2c3c56;
+    font-size: 16px;
+    margin-bottom: 13px;
+}
+
+.about-card p {
+    color: #78869b;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.fifo-operations {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 13px;
+    margin: 25px 0;
+}
+
+.fifo-operations div {
+    background: #f1f5fc;
+    padding: 18px 12px;
+    border-radius: 10px;
+}
+
+.fifo-operations h3 {
+    color: #326de0;
+    font-size: 13px;
+}
+
+.fifo-operations p {
+    font-size: 11px;
+    margin: 0;
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+footer {
+    text-align: center;
+    border-top: 1px solid #e3e7ef;
+    padding: 30px 10px;
+    margin-top: 40px;
+}
+
+footer h3 {
+    color: #2d4162;
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+
+footer p {
+    color: #8a97aa;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 1100px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .settings-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 15px;
+    }
+
+    .app-container {
+        flex-direction: column;
+    }
+
+    .logo {
+        margin-bottom: 15px;
+    }
+
+    .sidebar nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .nav-heading {
+        display: none;
+    }
+
+    .nav-link {
+        font-size: 12px;
+        padding: 9px;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 22px 16px;
+    }
+
+    .topbar h1 {
+        font-size: 23px;
+    }
+
+    .live-indicator {
+        font-size: 9px;
+        padding: 8px;
+    }
+
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fifo-operations {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px 12px;
+    }
+
+    .stat-card h2 {
+        font-size: 23px;
+    }
+
+    .stat-card span {
+        font-size: 10px;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .server-card {
+        padding: 18px;
+    }
+
+    .server-card h2 {
+        font-size: 21px;
+    }
+
+    .section-heading h2 {
+        font-size: 19px;
+    }
+
+    .queue-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .manual-input {
+        flex-direction: column;
+    }
+
+    .manual-input button {
+        width: 100%;
+    }
+
+}
