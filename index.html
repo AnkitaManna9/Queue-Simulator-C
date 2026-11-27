@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Queue Simulator | FIFO Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>Q</span>
+            <div>
+                <h2>QueueLab</h2>
+                <small>FIFO SIMULATOR</small>
+            </div>
+        </div>
+
+        <nav>
+            <p class="nav-heading">MAIN MENU</p>
+
+            <a href="#dashboard" class="nav-link active">
+                🏠 Dashboard
+            </a>
+
+            <a href="#simulator" class="nav-link">
+                🎫 Ticket Counter
+            </a>
+
+            <a href="#simulator" class="nav-link">
+                🖨 Printer Queue
+            </a>
+
+            <a href="#analytics" class="nav-link">
+                📊 Analytics
+            </a>
+
+            <a href="#activity" class="nav-link">
+                📋 Activity Log
+            </a>
+
+            <p class="nav-heading">INFORMATION</p>
+
+            <a href="#about" class="nav-link">
+                📚 About FIFO
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="status-dot"></div>
+            System Ready
+            <small>Version 1.0</small>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header class="topbar">
+
+            <div>
+                <p class="welcome-text">DATA STRUCTURE PROJECT</p>
+                <h1>Queue Simulator</h1>
+            </div>
+
+            <div class="topbar-right">
+                <span class="live-indicator">● LIVE SIMULATION</span>
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD -->
+        <section id="dashboard">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Simulation Dashboard</h2>
+                    <p>Monitor and manage your FIFO queue system.</p>
+                </div>
+            </div>
+
+
+            <!-- STATISTICS -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <span>Total Arrivals</span>
+                    <h2 id="totalArrivals">0</h2>
+                    <small>Entities generated</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>Total Served</span>
+                    <h2 id="totalServed">0</h2>
+                    <small>Completed services</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>Average Waiting Time</span>
+                    <h2 id="avgWait">0.00</h2>
+                    <small>Time units</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>Maximum Queue Length</span>
+                    <h2 id="maxQueue">0</h2>
+                    <small>Peak waiting queue</small>
+                </div>
+
+            </div>
+
+
+            <!-- SERVER STATUS -->
+            <div class="server-card">
+
+                <div>
+                    <span class="card-label">SERVER STATUS</span>
+                    <h2 id="serverStatus">IDLE</h2>
+                    <p id="serverMessage">
+                        Waiting for the next request.
+                    </p>
+                </div>
+
+                <div class="server-right">
+                    <span>UTILIZATION</span>
+                    <h2 id="utilization">0%</h2>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SIMULATOR -->
+        <section id="simulator">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Queue Simulator</h2>
+                    <p>Choose a mode and configure your simulation.</p>
+                </div>
+            </div>
+
+
+            <!-- MODE SELECTION -->
+            <div class="mode-selector">
+
+                <button id="ticketMode" class="mode-btn active"
+                    onclick="setMode('ticket')">
+                    🎫 Ticket Counter
+                </button>
+
+                <button id="printerMode" class="mode-btn"
+                    onclick="setMode('printer')">
+                    🖨 Printer Queue
+                </button>
+
+            </div>
+
+
+            <!-- SETTINGS -->
+            <div class="settings-card">
+
+                <h3>Simulation Configuration</h3>
+
+                <div class="settings-grid">
+
+                    <div class="form-group">
+                        <label for="duration">
+                            Simulation Duration (Ticks)
+                        </label>
+                        <input type="number" id="duration"
+                            value="100" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="arrivalProbability">
+                            Arrival Probability (0–1)
+                        </label>
+                        <input type="number" id="arrivalProbability"
+                            value="0.40" min="0" max="1" step="0.05">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="minService">
+                            Minimum Service Time
+                        </label>
+                        <input type="number" id="minService"
+                            value="2" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxService">
+                            Maximum Service Time
+                        </label>
+                        <input type="number" id="maxService"
+                            value="5" min="1">
+                    </div>
+
+                </div>
+
+                <div id="printerSettings" class="printer-settings hidden">
+
+                    <div class="form-group">
+                        <label for="pages">
+                            Number of Pages
+                        </label>
+                        <input type="number" id="pages"
+                            value="10" min="1">
+                    </div>
+
+                    <p>5 pages = 1 service tick</p>
+
+                </div>
+
+                <div class="simulation-controls">
+
+                    <button id="startBtn" class="primary-btn"
+                        onclick="startSimulation()">
+                        ▶ Start Simulation
+                    </button>
+
+                    <button id="pauseBtn" class="secondary-btn"
+                        onclick="pauseSimulation()">
+                        ⏸ Pause
+                    </button>
+
+                    <button class="reset-btn"
+                        onclick="resetSimulation()">
+                        ↻ Reset
+                    </button>
+
+                </div>
+
+                <p class="clock">
+                    Current Simulation Time:
+                    <strong id="currentTick">0</strong>
+                </p>
+
+            </div>
+
+
+            <!-- QUEUE VISUALIZATION -->
+            <div class="queue-card">
+
+                <div class="queue-heading">
+                    <div>
+                        <h3>Live Queue Visualization</h3>
+                        <p>First In → First Out</p>
+                    </div>
+
+                    <span class="queue-count">
+                        Queue Size: <strong id="queueSize">0</strong>
+                    </span>
+                </div>
+
+
+                <!-- SERVER -->
+                <div class="server-visual">
+
+                    <div class="server-icon">🖥️</div>
+
+                    <div>
+                        <strong>Service Counter / Printer</strong>
+                        <p id="currentEntity">No entity being served</p>
+                    </div>
+
+                </div>
+
+
+                <div class="queue-labels">
+                    <span>FRONT (NEXT TO SERVE)</span>
+                    <span>REAR (NEW ARRIVALS)</span>
+                </div>
+
+
+                <div id="queueContainer" class="queue-container">
+
+                    <p class="empty-message">
+                        Your queue is empty. Start the simulation!
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- MANUAL QUEUE CONTROLS -->
+            <div class="manual-controls">
+
+                <h3>Manual Queue Operations</h3>
+
+                <p>Test the FIFO data structure manually.</p>
+
+                <div class="manual-input">
+
+                    <input type="text" id="entityName"
+                        placeholder="Enter customer / job name">
+
+                    <button class="primary-btn"
+                        onclick="enqueueManual()">
+                        + Enqueue
+                    </button>
+
+                    <button class="secondary-btn"
+                        onclick="dequeueManual()">
+                        Dequeue
+                    </button>
+
+                    <button class="secondary-btn"
+                        onclick="peekQueue()">
+                        Peek
+                    </button>
+
+                </div>
+
+                <p id="operationMessage" class="operation-message">
+                    Waiting for an operation...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ANALYTICS -->
+        <section id="analytics">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Performance Analytics</h2>
+                    <p>Analyze the behaviour of your queue system.</p>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+
+                <div class="chart-card">
+                    <h3>Queue Length Analysis</h3>
+                    <canvas id="queueChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Performance Overview</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACTIVITY LOG -->
+        <section id="activity">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Activity Log</h2>
+                    <p>Complete transaction history.</p>
+                </div>
+
+                <button class="primary-btn"
+                    onclick="exportCSV()">
+                    ↓ Export CSV
+                </button>
+
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Entity ID</th>
+                            <th>Type / Name</th>
+                            <th>Arrival</th>
+                            <th>Service Start</th>
+                            <th>Completion</th>
+                            <th>Waiting Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="activityTable">
+
+                        <tr>
+                            <td colspan="6" class="empty-table">
+                                No transactions recorded yet.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT FIFO -->
+        <section id="about">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Understanding FIFO</h2>
+                    <p>First In, First Out data structure.</p>
+                </div>
+            </div>
+
+            <div class="about-card">
+
+                <h3>What is a Queue?</h3>
+
+                <p>
+                    A Queue is a linear data structure that follows
+                    the First-In, First-Out (FIFO) principle.
+                    The element inserted first is removed first.
+                </p>
+
+                <div class="fifo-operations">
+
+                    <div>
+                        <h3>ENQUEUE</h3>
+                        <p>Add an element at the rear.</p>
+                    </div>
+
+                    <div>
+                        <h3>DEQUEUE</h3>
+                        <p>Remove an element from the front.</p>
+                    </div>
+
+                    <div>
+                        <h3>PEEK</h3>
+                        <p>View the front element.</p>
+                    </div>
+
+                    <div>
+                        <h3>SIZE</h3>
+                        <p>Return the number of elements.</p>
+                    </div>
+
+                </div>
+
+                <h3>Time Complexity</h3>
+
+                <p>
+                    Enqueue: O(1) &nbsp; | &nbsp;
+                    Dequeue: O(1) &nbsp; | &nbsp;
+                    Peek: O(1)
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer>
+
+            <h3>QueueLab – FIFO Queue Simulator</h3>
+
+            <p>
+                Modelling a Ticket Counter and Printer Queue
+                Using FIFO Data Structure.
+            </p>
+
+            <p>
+                Data Structures and Algorithms Project
+            </p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>
