@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive FIFO queue simulator for ticket counters and printer queues.">
+  <title>Queue Simulator | FIFO Project</title>
+  <style>
+    :root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#64748b;--blue:#2563eb;--blue2:#dbeafe;--green:#059669;--line:#e2e8f0;--amber:#d97706;--shadow:0 12px 32px rgba(15,23,42,.07)}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55}
+    header{background:linear-gradient(120deg,#101c3a,#1d4ed8);color:white;padding:42px 20px 54px}
+    .wrap{max-width:1120px;margin:auto;padding:0 18px}.eyebrow{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:#bfdbfe;font-weight:800}
+    h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.08;margin:12px 0}.subtitle{max-width:720px;color:#dbeafe;margin:12px 0 0}
+    nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}nav a{color:white;text-decoration:none;border:1px solid #ffffff55;border-radius:999px;padding:7px 13px;font-size:.9rem}
+    main{margin-top:-25px;padding-bottom:45px}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
+    .section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}h2{font-size:1.35rem;margin:0}h3{font-size:1rem;margin:0 0 8px}
+    .muted{color:var(--muted)}.small{font-size:.86rem}.mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .mode{border:1.5px solid var(--line);border-radius:14px;padding:17px;cursor:pointer;background:white;text-align:left;color:var(--ink);font:inherit}
+    .mode.active{border-color:var(--blue);background:#eff6ff;box-shadow:0 0 0 3px #2563eb14}.mode strong{display:block;font-size:1.02rem}.mode span{font-size:.86rem;color:var(--muted)}
+    .form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.field label{display:block;font-size:.84rem;font-weight:700;margin-bottom:6px}
+    input,select{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;background:white;color:var(--ink);font:inherit}
+    input:focus,select:focus{outline:3px solid #bfdbfe;border-color:var(--blue)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:10px;padding:11px 17px;font:inherit;font-weight:750;cursor:pointer}
+    .primary{background:var(--blue);color:white}.secondary{background:#e2e8f0;color:#172033}.success{background:#059669;color:white}.btn:disabled{opacity:.45;cursor:not-allowed}
+    .notice{background:#eff6ff;border-left:4px solid var(--blue);padding:12px 14px;border-radius:8px;color:#1e3a8a;font-size:.9rem;margin-top:14px}
+    .metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:11px}.metric{padding:14px;border:1px solid var(--line);border-radius:13px;background:#fbfdff}.metric .label{font-size:.77rem;color:var(--muted)}.metric .value{font-size:1.5rem;font-weight:850;margin-top:3px;overflow-wrap:anywhere}
+    .visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.visual{border:1px solid var(--line);border-radius:14px;padding:15px;min-height:160px}.queue{display:flex;gap:9px;flex-wrap:wrap;align-items:center;min-height:70px;margin-top:12px}
+    .token{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;border-radius:10px;padding:9px 12px;font-weight:800}.token:first-child{background:#dcfce7;color:#166534;border-color:#86efac}
+    .server{display:flex;align-items:center;gap:12px;margin-top:12px}.server-icon{width:52px;height:52px;border-radius:13px;background:#f1f5f9;display:grid;place-items:center;font-size:1.6rem}
+    .status{font-weight:800}.status.busy{color:var(--amber)}.status.idle{color:var(--green)}
+    .table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:680px;font-size:.88rem}th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--line);white-space:nowrap}th{background:#f8fafc;color:#475569}
+    .empty{text-align:center;color:var(--muted);padding:25px}.log{max-height:280px;overflow:auto;font-family:ui-monospace,SFMono-Regular,monospace;font-size:.82rem;background:#0f172a;color:#dbeafe;border-radius:12px;padding:14px}.log div{padding:3px 0;border-bottom:1px solid #ffffff12}
+    .bar-bg{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:8px}.bar{height:100%;background:var(--green);width:0}
+    footer{text-align:center;padding:22px;color:var(--muted);font-size:.85rem}
+    @media(max-width:850px){.metrics{grid-template-columns:repeat(3,1fr)}.form-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){header{padding:32px 0 48px}.mode-grid,.visual-grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.panel{padding:16px}.form-grid{grid-template-columns:1fr 1fr}.metric .value{font-size:1.25rem}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Data Structures · Mini Project</div>
+    <h1>Queue Simulator</h1>
+    <p class="subtitle">Modelling a Ticket Counter and Printer Queue using the First-In, First-Out (FIFO) data structure.</p>
+    <nav><a href="#simulator">Simulator</a><a href="#dashboard">Statistics</a><a href="#events">Event Log</a><a href="#about">About FIFO</a></nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="panel" id="simulator">
+    <div class="section-head"><h2>1. Choose simulation mode</h2><span class="muted small">Single-server FIFO model</span></div>
+    <div class="mode-grid">
+      <button class="mode active" id="ticketMode" type="button"><strong>🎟️ Ticket Counter</strong><span>Customers arrive and wait for ticket service.</span></button>
+      <button class="mode" id="printerMode" type="button"><strong>🖨️ Printer Queue</strong><span>Print jobs wait for the shared printer.</span></button>
+    </div>
+    <div class="section-head" style="margin-top:24px"><h2>2. Configure simulation</h2></div>
+    <div class="form-grid">
+      <div class="field"><label for="duration">Simulation duration (ticks)</label><input id="duration" type="number" min="1" max="100000" value="60"></div>
+      <div class="field"><label for="probability">Arrival probability (0–1)</label><input id="probability" type="number" min="0" max="1" step="0.05" value="0.35"></div>
+      <div class="field"><label for="serviceMin" id="minLabel">Minimum service time (ticks)</label><input id="serviceMin" type="number" min="1" value="2"></div>
+      <div class="field"><label for="serviceMax" id="maxLabel">Maximum service time (ticks)</label><input id="serviceMax" type="number" min="1" value="5"></div>
+    </div>
+    <div class="notice" id="modeHint">Ticket Counter mode: each arrival represents one customer. Service time is randomly selected between the minimum and maximum values.</div>
+    <div class="actions">
+      <button class="btn primary" id="runBtn" type="button">▶ Run Simulation</button>
+      <button class="btn secondary" id="stepBtn" type="button">Next Tick</button>
+      <button class="btn secondary" id="resetBtn" type="button">↻ Reset</button>
+      <button class="btn success" id="csvBtn" type="button" disabled>↓ Download CSV Report</button>
+    </div>
+    <p class="muted small" id="runStatus" aria-live="polite">Set your parameters and run the simulation. Random arrivals are generated using the selected probability.</p>
+  </section>
+
+  <section class="panel">
+    <div class="section-head"><h2>3. Live FIFO queue</h2><span class="muted small" id="clock">Clock: 0 / 60 ticks</span></div>
+    <div class="visual-grid">
+      <div class="visual">
+        <h3>Waiting Queue</h3><p class="muted small">Front of queue is served first →</p>
+        <div class="queue" id="queueView"><span class="muted small">Queue is empty.</span></div>
+        <p class="muted small" id="queueSize">Queue size: 0</p>
+      </div>
+      <div class="visual">
+        <h3 id="serverTitle">Ticket Counter / Server</h3>
+        <div class="server"><div class="server-icon" id="serverIcon">🎟️</div><div><div class="status idle" id="serverStatus">IDLE</div><div class="muted small" id="currentJob">No active service</div></div></div>
+        <p class="muted small" id="serverRemaining">Server is available.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="dashboard">
+    <div class="section-head"><h2>4. Simulation statistics</h2><span class="muted small">Calculated from this run</span></div>
+    <div class="metrics">
+      <div class="metric"><div class="label">Total Arrived</div><div class="value" id="mArrived">0</div></div>
+      <div class="metric"><div class="label">Total Served / Started</div><div class="value" id="mServed">0</div></div>
+      <div class="metric"><div class="label">Average Waiting Time</div><div class="value" id="mWait">0.00</div></div>
+      <div class="metric"><div class="label">Maximum Queue Length</div><div class="value" id="mMax">0</div></div>
+      <div class="metric"><div class="label">Server Utilization</div><div class="value" id="mUtil">0.00%</div></div>
+      <div class="metric"><div class="label">Still Waiting</div><div class="value" id="mWaiting">0</div></div>
+    </div>
+    <div style="margin-top:17px"><div class="section-head"><strong class="small">Server utilization</strong><strong class="small" id="utilText">0.00%</strong></div><div class="bar-bg"><div class="bar" id="utilBar"></div></div></div>
+  </section>
+
+  <section class="panel">
+    <div class="section-head"><h2>5. Transaction records</h2><span class="muted small">Arrival, service and waiting details</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Entity ID</th><th>Type</th><th>Arrival</th><th>Start</th><th>Completion</th><th>Wait</th><th>Service</th></tr></thead><tbody id="records"><tr><td colspan="7" class="empty">No simulation records yet.</td></tr></tbody></table></div>
+  </section>
+
+  <section class="panel" id="events">
+    <div class="section-head"><h2>6. Event log</h2><span class="muted small">Tick-by-tick activity</span></div>
+    <div class="log" id="eventLog"><div>Simulator ready. Choose a mode and run the simulation.</div></div>
+  </section>
+
+  <section class="panel" id="about">
+    <h2>About the project</h2>
+    <p>This project demonstrates how a linear Queue Abstract Data Type (ADT) models real-world waiting lines. The simulator follows the <strong>First-In, First-Out (FIFO)</strong> principle: the first customer or print job to enter the queue is the first one removed for service.</p>
+    <div class="visual-grid">
+      <div><h3>Core queue operations</h3><ul><li><strong>enqueue()</strong> – add an entity at the rear.</li><li><strong>dequeue()</strong> – remove the entity at the front.</li><li><strong>peek()</strong> – inspect the front entity.</li><li><strong>size()</strong> – return the number waiting.</li></ul></div>
+      <div><h3>Simulation objectives</h3><ul><li>Generate probabilistic arrivals.</li><li>Manage a single FIFO service queue.</li><li>Track arrival, start and completion ticks.</li><li>Calculate average waiting time, maximum queue length and server utilization.</li></ul></div>
+    </div>
+    <p class="muted small">Model note: This is a browser-based educational implementation of the algorithm described in the project report. It uses JavaScript so it can run on static hosting such as GitHub Pages.</p>
+  </section>
+</main>
+<footer>Queue Simulator · FIFO Data Structure · Educational Project</footer>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let mode = "ticket", state, config, timer = null;
+  const resetState = () => ({tick:0, queue:[], current:null, busyUntil:0, arrived:0, served:0, totalWait:0, busyTicks:0, maxQueue:0, records:[], events:[], finished:false});
+  function addEvent(message){ state.events.unshift(`[Tick ${state.tick}] ${message}`); if(state.events.length>160) state.events.pop(); }
+  function setMode(next){
+    stopAuto(); mode=next;
+    $("ticketMode").classList.toggle("active",mode==="ticket");
+    $("printerMode").classList.toggle("active",mode==="printer");
+    $("minLabel").textContent=mode==="ticket"?"Minimum service time (ticks)":"Minimum job size (pages)";
+    $("maxLabel").textContent=mode==="ticket"?"Maximum service time (ticks)":"Maximum job size (pages)";
+    $("serviceMin").value=mode==="ticket"?2:5; $("serviceMax").value=mode==="ticket"?5:25;
+    $("serverIcon").textContent=mode==="ticket"?"🎟️":"🖨️";
+    $("serverTitle").textContent=mode==="ticket"?"Ticket Counter / Server":"Printer / Server";
+    $("modeHint").textContent=mode==="ticket"?"Ticket Counter mode: each arrival represents one customer. Service time is randomly selected between the minimum and maximum values.":"Printer Queue mode: each arrival represents a print job. Job size is randomly selected in pages and converted to service ticks at 5 pages per tick, as in the project test scenario.";
+    reset();
+  }
+  function readConfig(){
+    const duration=Number($("duration").value), probability=Number($("probability").value), min=Number($("serviceMin").value), max=Number($("serviceMax").value);
+    if(!Number.isInteger(duration)||duration<1||duration>100000) throw Error("Duration must be a whole number between 1 and 100000 ticks.");
+    if(!Number.isFinite(probability)||probability<0||probability>1) throw Error("Arrival probability must be between 0 and 1.");
+    if(!Number.isInteger(min)||!Number.isInteger(max)||min<1||max<min) throw Error("Service minimum and maximum must be positive whole numbers, and maximum must be at least minimum.");
+    return {duration,probability,min,max};
+  }
+  function serviceForEntity(){
+    const raw=Math.floor(Math.random()*(config.max-config.min+1))+config.min;
+    return mode==="printer"?{service:Math.ceil(raw/5),detail:`${raw} pages`}:{service:raw,detail:`${raw} ticks`};
+  }
+  function tickOnce(){
+    if(state.finished) return;
+    state.tick++;
+    if(Math.random()<=config.probability){
+      const id=state.arrived+1; state.arrived++;
+      const svc=serviceForEntity();
+      const entity={id,arrival:state.tick,service:svc.service,detail:svc.detail,type:mode==="ticket"?"Customer":"Print Job"};
+      state.queue.push(entity); addEvent(`${entity.type} #${id} arrived and joined the rear of the queue (service: ${svc.detail}).`);
+    }
+    if(state.tick>=state.busyUntil && state.queue.length>0){
+      const entity=state.queue.shift();
+      const wait=state.tick-entity.arrival;
+      entity.start=state.tick; entity.completion=state.tick+entity.service; entity.wait=wait;
+      state.current=entity; state.busyUntil=entity.completion; state.served++; state.totalWait+=wait;
+      state.records.push(entity);
+      addEvent(`${entity.type} #${entity.id} started service. Waiting time: ${wait} tick(s); completion at tick ${entity.completion}.`);
+    }
+    if(state.tick<state.busyUntil) state.busyTicks++;
+    state.maxQueue=Math.max(state.maxQueue,state.queue.length);
+    if(state.tick>=config.duration){state.finished=true; addEvent("Simulation duration completed."); stopAuto();}
+    render();
+  }
+  function runAll(){
+    try{config=readConfig(); resetState(); addEvent(`Simulation started: ${mode==="ticket"?"Ticket Counter":"Printer Queue"} mode.`); while(!state.finished) tickOnce(); $("runStatus").textContent="Simulation completed. You can download the CSV transaction report."; $("csvBtn").disabled=state.records.length===0; }
+    catch(e){$("runStatus").textContent=e.message; alert(e.message);}
+  }
+  function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
+  function reset(){
+    stopAuto(); state=resetState();
+    $("runStatus").textContent="Ready. Configure the inputs and run the simulation or advance one tick at a time.";
+    $("csvBtn").disabled=true; render();
+  }
+  function render(){
+    $("clock").textContent=`Clock: ${state.tick} / ${config?.duration||Number($("duration").value)||60} ticks`;
+    $("queueSize").textContent=`Queue size: ${state.queue.length}`;
+    $("queueView").innerHTML=state.queue.length?state.queue.map((e,i)=>`<span class="token">${i===0?"FRONT · ":""}#${e.id}</span>`).join(""):'<span class="muted small">Queue is empty.</span>';
+    const busy=state.current && state.tick<state.busyUntil;
+    $("serverStatus").textContent=busy?"BUSY":"IDLE"; $("serverStatus").className=`status ${busy?"busy":"idle"}`;
+    $("currentJob").textContent=busy?`${state.current.type} #${state.current.id}`:"No active service";
+    $("serverRemaining").textContent=busy?`Scheduled completion: tick ${state.busyUntil}`:"Server is available.";
+    $("mArrived").textContent=state.arrived; $("mServed").textContent=state.served;
+    $("mWait").textContent=state.served?(state.totalWait/state.served).toFixed(2):"0.00";
+    $("mMax").textContent=state.maxQueue; const util=config?.duration?state.busyTicks/config.duration*100:0;
+    $("mUtil").textContent=util.toFixed(2)+"%"; $("utilText").textContent=util.toFixed(2)+"%"; $("utilBar").style.width=Math.min(100,util)+"%";
+    $("mWaiting").textContent=state.queue.length;
+    $("records").innerHTML=state.records.length?state.records.map(e=>`<tr><td>#${e.id}</td><td>${e.type}</td><td>${e.arrival}</td><td>${e.start}</td><td>${e.completion}</td><td>${e.wait}</td><td>${e.detail}</td></tr>`).join(""):'<tr><td colspan="7" class="empty">No entities have started service yet.</td></tr>';
+    $("eventLog").innerHTML=state.events.length?state.events.map(e=>`<div>${escapeHtml(e)}</div>`).join(""):'<div>Waiting for simulation events...</div>';
+    $("stepBtn").disabled=state.finished; $("runBtn").disabled=state.finished;
+    $("csvBtn").disabled=state.records.length===0;
+  }
+  function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+  function downloadCSV(){
+    if(!state.records.length)return;
+    const rows=[["Entity_ID","Domain_Type","Arrival_Tick","Start_Tick","Completion_Tick","Wait_Duration","Service_Duration"]];
+    state.records.forEach(e=>rows.push([e.id,mode==="ticket"?"Customer":"PrintJob",e.arrival,e.start,e.completion,e.wait,e.service]));
+    const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+    const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="simulation_report.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  }
+  $("ticketMode").addEventListener("click",()=>setMode("ticket"));
+  $("printerMode").addEventListener("click",()=>setMode("printer"));
+  $("runBtn").addEventListener("click",runAll);
+  $("stepBtn").addEventListener("click",()=>{try{if(state.tick===0)config=readConfig();if(state.finished) return;tickOnce();$("runStatus").textContent=state.finished?"Simulation completed.":"Advanced by one tick."; }catch(e){alert(e.message);}});
+  $("resetBtn").addEventListener("click",reset);
+  $("csvBtn").addEventListener("click",downloadCSV);
+  config=readConfig();reset();
+})();
+</script>
+</body>
+</html>
